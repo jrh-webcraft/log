@@ -1,0 +1,25 @@
+{
+  "name": "@jrh/log",
+  "version": "2.3.0",
+  "description": "Combined local and remote logging for Node.js applications.",
+  "main": "source/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:jrh-webcraft/log.git"
+  },
+  "scripts": {
+    "test": "mocha -r tests/tests.support source/*.test.js"
+  },
+  "devDependencies": {
+    "@jrh/adapt": "^3.0.1",
+    "chai": "^4.3.6",
+    "mocha": "^9.2.2",
+    "sinon": "^13.0.1",
+    "sinon-chai": "^3.7.0"
+  },
+  "dependencies": {
+    "@jrh/rely": "^1.1.0",
+    "axios": "^0.26.1",
+    "nanoid": "^3.3.2"
+  }
+}

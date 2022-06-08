@@ -44,6 +44,7 @@ async function initialize() {
 | Property | Type | Description |
 | :-- | :-- | :-- |
 | application | String | The name of the application. |
+| includeUniqueId | Boolean | By default, a unique ID specific to this logging function will be included with each message. Pass `false` to disable. |
 | key | String | The LogDNA API key. |
 | mode | String | The mode of the running application (i.e. `production`). **When the mode is set to `testing`, remote logs are disabled.** |
 | source | String | The source of the log message. |

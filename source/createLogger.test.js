@@ -123,6 +123,50 @@ describe('createLogger()', () => {
       })
     })
 
+    context('when unique IDs are disabled', () => {
+      it('does not include a request ID in each message', () => {
+        const localLogger = { ...fake.logger, error: spy(), info: spy() }
+        const remoteLogger = { ...fake.logger, error: spy(), info: spy() }
+        const createUniqueId = stub().returns('id')
+
+        const dependencies = {
+          ...fake.dependencies,
+          createLocalLogger: () => localLogger,
+          createRemoteLogger: () => remoteLogger,
+          createUniqueId
+        }
+
+        const options = {
+          ...valid.options,
+          includeUniqueId: false
+        }
+
+        const log = createLogger.provide(dependencies).run(options)
+
+        log('Message 1')
+        log('Message 2')
+        log.error('Error message.')
+
+        expect(createUniqueId).to.have.been.calledOnceWith(8)
+
+        expect(localLogger.info).to.have.been.calledTwice
+        expect(remoteLogger.info).to.have.been.calledTwice
+        expect(localLogger.error).to.have.been.calledOnce
+        expect(remoteLogger.error).to.have.been.calledOnce
+
+        const calls = [
+          ...localLogger.info.getCalls(),
+          ...remoteLogger.info.getCalls(),
+          ...localLogger.error.getCalls(),
+          ...remoteLogger.error.getCalls()
+        ]
+
+        calls.forEach(call => {
+          expect(call.args[0]).not.to.include('id')
+        })
+      })
+    })
+
     context('with data', () => {
       it('includes the data', () => {
         const localLogger = { ...fake.logger, info: spy() }

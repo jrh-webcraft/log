@@ -2,7 +2,7 @@ const rely = require('@jrh/rely')
 
 // -----------------------------------------------------
 
-function createLogger({ application, key, mode, source }, dependencies) {
+function createLogger({ application, includeUniqueId, key, mode, source }, dependencies) {
   const { createLocalLogger, createRemoteLogger, createUniqueId } = dependencies
 
   // -----------------------------------------------------
@@ -14,6 +14,10 @@ function createLogger({ application, key, mode, source }, dependencies) {
   // -----------------------------------------------------
 
   function decorateMessage(message) {
+    if (includeUniqueId === false) {
+      return message
+    }
+
     return `(${ id }) ${ message }`
   }
 

@@ -35,8 +35,12 @@ function createRemoteLogger({ application, key, source }, { request }) {
       lines = [ ...lines, createLine(message, { level: 'error' }) ]
     },
 
-    send() {
-      return request.post(url, { lines })
+    async send() {
+      if (lines.length) {
+        await request.post(url, { lines })
+      }
+
+      lines = []
     }
   }
 }

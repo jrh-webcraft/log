@@ -124,6 +124,29 @@ describe('createRemoteLogger()', () => {
 
         clock.restore()
       })
+
+      it('clears queued requests after sending', async () => {
+        const now = new Date().getTime()
+        const request = { post: spy() }
+
+        const logger = createRemoteLogger.provide({ request }).run(valid.configuration)
+
+        logger.info('Message 1')
+        logger.info('Message 2')
+        await logger.send()
+
+        expect(request.post).to.have.been.calledOnce
+        expect(request.post.firstCall.args[1].lines).to.have.length(2)
+
+        logger.info('Message 2')
+        await logger.send()
+        expect(request.post).to.have.been.calledTwice
+        expect(request.post.secondCall.args[1].lines).to.have.length(1)
+
+        // It does not post if there are no lines to send.
+        await logger.send()
+        expect(request.post).to.have.been.calledTwice
+      })
     })
   })
 })
